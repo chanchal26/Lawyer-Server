@@ -71,6 +71,23 @@ app.get('/reviews', async (req, res) => {
     }
 });
 
+app.get('/services', async (req, res) => {
+    try {
+        const cursor = await Services.find({});
+        const services = await cursor.toArray();
+        res.send({
+            success: true,
+            message: `Successfully got the data`,
+            data: services
+        })
+    } catch (error) {
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+});
+
 app.delete('/reviews/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -107,7 +124,24 @@ app.get('/reviews/:id', async (req, res) => {
             message: error.message
         })
     }
-})
+});
+
+app.get('/services/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const service = await Services.findOne({ _id: ObjectId(id) })
+        res.send({
+            success: true,
+            data: service
+        })
+    }
+    catch (error) {
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+});
 
 app.patch('/reviews/:id', async (req, res) => {
     const { id } = req.params;
