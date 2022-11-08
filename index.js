@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -13,22 +13,84 @@ const uri = `mongodb+srv://lawyer-db:PLlAcOXxetPxrRe@cluster0.v73oziy.mongodb.ne
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 
-async function run() {
+async function dbConnect() {
     try {
-        const Services = client.db('lawyer').collection('services');
-        const Reviews = client.db('lawyer').collection('review');
-        const service = {
-            name: 'divorce case',
-            email: 'ab@gm.com'
-        }
-        const result = await Services.insertOne(service);
-    }
-    finally {
 
+        await client.connect();
+        console.log('database connected');
+
+    }
+    catch (error) {
+        console.log(error.name, error.message);
     }
 }
 
-run().catch(err => console.log(err));
+dbConnect();
+
+
+const Services = client.db('lawyer').collection('services');
+const Reviews = client.db('lawyer').collection('reviews');
+
+app.post('/reviews', async (req, res) => {
+    try {
+        const result = await Reviews.insertOne(req.body);
+        if (result.insertedId) {
+            res.send({
+                success: true,
+                message: `Successfully created the review with id ${result.insertedId}`
+            })
+        } else {
+            res.send({
+                success: false,
+                message: "Couldn't create the review"
+            })
+        }
+    } catch (error) {
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+});
+
+
+// app.get('/reviews', async (req, res) => {
+//     try {
+//         const cursor = await Reviews.find({});
+//         const reviews = await cursor.toArray();
+//         res.send({
+//             success: true,
+//             message: `Successfully got the data`,
+//             data: reviews
+//         })
+//     } catch (error) {
+//         res.send({
+//             success: false,
+//             message: error.message
+//         })
+//     }
+// });
+
+// app.delete('/reviews/:id', async (req, res) => {
+//     const { id } = req.params;
+//     try {
+//         const result = await Reviews.deleteOne({ _id: ObjectId(id) });
+//         if (result.deletedCount) {
+//             res.send({
+//                 success: true,
+//                 message: `Successfully Deleted The Review`
+//             })
+//         } else {
+
+//         }
+//     }
+//     catch (error) {
+//         res.send({
+//             success: false,
+//             error: error.message
+//         })
+//     }
+// })
 
 
 app.get('/', (req, res) => {
