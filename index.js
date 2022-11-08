@@ -54,22 +54,22 @@ app.post('/reviews', async (req, res) => {
 });
 
 
-// app.get('/reviews', async (req, res) => {
-//     try {
-//         const cursor = await Reviews.find({});
-//         const reviews = await cursor.toArray();
-//         res.send({
-//             success: true,
-//             message: `Successfully got the data`,
-//             data: reviews
-//         })
-//     } catch (error) {
-//         res.send({
-//             success: false,
-//             message: error.message
-//         })
-//     }
-// });
+app.get('/reviews', async (req, res) => {
+    try {
+        const cursor = await Reviews.find({});
+        const reviews = await cursor.toArray();
+        res.send({
+            success: true,
+            message: `Successfully got the data`,
+            data: reviews
+        })
+    } catch (error) {
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+});
 
 // app.delete('/reviews/:id', async (req, res) => {
 //     const { id } = req.params;
