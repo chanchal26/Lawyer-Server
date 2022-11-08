@@ -71,26 +71,26 @@ app.get('/reviews', async (req, res) => {
     }
 });
 
-// app.delete('/reviews/:id', async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//         const result = await Reviews.deleteOne({ _id: ObjectId(id) });
-//         if (result.deletedCount) {
-//             res.send({
-//                 success: true,
-//                 message: `Successfully Deleted The Review`
-//             })
-//         } else {
+app.delete('/reviews/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await Reviews.deleteOne({ _id: ObjectId(id) });
+        if (result.deletedCount) {
+            res.send({
+                success: true,
+                message: `Successfully Deleted The Review`
+            })
+        } else {
 
-//         }
-//     }
-//     catch (error) {
-//         res.send({
-//             success: false,
-//             error: error.message
-//         })
-//     }
-// })
+        }
+    }
+    catch (error) {
+        res.send({
+            success: false,
+            error: error.message
+        })
+    }
+})
 
 
 app.get('/', (req, res) => {
