@@ -90,6 +90,47 @@ app.delete('/reviews/:id', async (req, res) => {
             error: error.message
         })
     }
+});
+
+app.get('/reviews/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const review = await Reviews.findOne({ _id: ObjectId(id) })
+        res.send({
+            success: true,
+            data: review
+        })
+    }
+    catch (error) {
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
+app.patch('/reviews/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await Reviews.updateOne({ _id: ObjectId(id) }, { $set: req.body });
+        if (result.matchedCount) {
+            res.send({
+                success: true,
+                message: 'Successfully Updated Your Review'
+            })
+        } else {
+            res.send({
+                success: false,
+                message: "Couldn't Update the review"
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
 })
 
 
