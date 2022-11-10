@@ -95,6 +95,25 @@ app.get('/reviews', async (req, res) => {
     }
 });
 
+app.get('/reviews/:email', async (req, res) => {
+    try {
+        const email = req.params.email;
+        const cursor = await Reviews.find({ email: email });
+        const reviews = (await cursor.toArray()).reverse();
+        res.send({
+            success: true,
+            message: `Successfully got the data`,
+            data: reviews
+        })
+    } catch (error) {
+        res.send({
+            success: false,
+            message: error.message
+        })
+    }
+});
+
+
 app.get('/services/home', async (req, res) => {
     try {
         const cursor = await Services.find({}).limit(3);
